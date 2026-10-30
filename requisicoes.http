@@ -1,5 +1,5 @@
 @url = http://localhost:5187
-# Na demonstração, troque @url pela URL da Render: https://brecho-api.onrender.com
+# Na demonstração, troque @url pela URL da Render: https://brecho-api-jie1.onrender.com
 @tokenAdmin = COLE_O_TOKEN_DO_ADMIN_AQUI
 @tokenClienteA = COLE_O_TOKEN_DO_CLIENTE_A_AQUI
 @tokenClienteB = COLE_O_TOKEN_DO_CLIENTE_B_AQUI

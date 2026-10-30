@@ -1,8 +1,8 @@
 # Garimpo Vintage — API de Brechó
 **Nicho:** Brechó ou loja de roupas · **Aluno:** Pedro Falleiro Mendes (@pedrinfal)
-**API no ar:** https://brecho-api.onrender.com/swagger
-**Saúde e versão:** https://brecho-api.onrender.com/health · https://brecho-api.onrender.com/api/versao
-**Front-end:** https://brecho-front.onrender.com
+**API no ar:** https://brecho-api-jie1.onrender.com/swagger
+**Saúde e versão:** https://brecho-api-jie1.onrender.com/health · https://brecho-api-jie1.onrender.com/api/versao
+**Front-end:** https://brecho-front-fb7v.onrender.com
 
 ## O que a API faz
 API REST para gestão de acervo e vendas de um brechó de moda circular e garimpo vintage (**Garimpo Vintage**).
@@ -66,7 +66,7 @@ Localizado na pasta `front/` (React 19 + TypeScript + Vite + React Router 8.4.0,
 - **`/login` e `/cadastro`:** autenticação JWT e registro de novos clientes com medidor de força de senha e exibição de erros 400/401/409 vindos do `ProblemDetails`.
 - **`/vendas` (`Vendas.tsx`):** área logada que lista as compras do cliente e permite registrar uma nova compra (`POST /api/vendas` com `Authorization: Bearer <token>`), exibindo na tela o erro `409 Conflict` caso a peça já tenha sido vendida, além de cancelamento com confirmação em `<dialog>` nativo.
 - **`/admin/pecas` (`AdminPecas.tsx`):** painel exclusivo para o papel `admin` para criar, editar (`?editar=ID`) e excluir peças.
-- **CORS na API:** configurado via variável `Cors__Origens` (padrão `http://localhost:5173` no desenvolvimento e a URL do Static Site `https://brecho-front.onrender.com` na Render).
+- **CORS na API:** configurado via variável `Cors__Origens` (padrão `http://localhost:5173` no desenvolvimento e a URL do Static Site `https://brecho-front-fb7v.onrender.com` na Render).
 
 ## Como usei a IA
 - **IA usada:** Google Gemini (Antigravity).
