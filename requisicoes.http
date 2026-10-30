@@ -1,0 +1,153 @@
+@url = http://localhost:5187
+# Na demonstração, troque @url pela URL da Render: https://brecho-api.onrender.com
+@tokenAdmin = COLE_O_TOKEN_DO_ADMIN_AQUI
+@tokenClienteA = COLE_O_TOKEN_DO_CLIENTE_A_AQUI
+@tokenClienteB = COLE_O_TOKEN_DO_CLIENTE_B_AQUI
+
+### 1. Saúde e versão
+GET {{url}}/health
+###
+GET {{url}}/api/versao
+
+### 2. Listagem pública paginada + busca (com resultado) · busca sem resultado (200 lista vazia, total 0)
+GET {{url}}/api/pecas?busca=jaqueta&pagina=1&tamanho=5
+###
+GET {{url}}/api/pecas?busca=zzzz
+
+### 3. Detalhe por ID (200) · ID inexistente (404 ProblemDetails)
+GET {{url}}/api/pecas/1
+###
+GET {{url}}/api/pecas/9999
+
+### 4. Rota protegida sem token → 401 Unauthorized
+GET {{url}}/api/vendas
+
+### 5. Registro de novo cliente → 201 Created (se rodar de novo com o mesmo e-mail → 409 Conflict)
+POST {{url}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nome": "Clara Mendes",
+  "email": "clara@exemplo.com",
+  "senha": "Cliente@2026"
+}
+
+### 6. Login (conta admin do seed) → 200 OK
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@exemplo.com",
+  "senha": "Admin@2026"
+}
+
+### 7. Login (conta Cliente A do seed) → 200 OK
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@exemplo.com",
+  "senha": "Cliente@2026"
+}
+
+### 8. Login (conta Cliente B do seed) → 200 OK
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "bruno@exemplo.com",
+  "senha": "Cliente@2026"
+}
+
+### 9. Criar peça no acervo (admin) → 201 Created + cabeçalho Location
+POST {{url}}/api/pecas
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nome": "Sobretudo Lã Batida Vintage Anos 80",
+  "descricao": "Sobretudo longo em lã batida caramelo com botões tartaruga e forro de cetim.",
+  "tamanho": "G",
+  "categoria": "Casacos e Jaquetas",
+  "condicao": "Excelente (seminovo)",
+  "preco": 210.00
+}
+
+### 10. Corpo inválido ao criar peça → 400 Bad Request (ValidationProblemDetails)
+POST {{url}}/api/pecas
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nome": "",
+  "descricao": "abc",
+  "tamanho": "",
+  "categoria": "",
+  "condicao": "",
+  "preco": -10
+}
+
+### 11. Cliente tentando rota exclusiva de admin (criar peça) → 403 Forbidden
+POST {{url}}/api/pecas
+Authorization: Bearer {{tokenClienteA}}
+Content-Type: application/json
+
+{
+  "nome": "Peça Tentativa Cliente",
+  "descricao": "Tentativa de cadastro por usuário sem papel admin.",
+  "tamanho": "M",
+  "categoria": "Camisas",
+  "condicao": "Seminova",
+  "preco": 80.00
+}
+
+### 12. Editar peça existente (admin) → 200 OK
+PUT {{url}}/api/pecas/1
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "nome": "Jaqueta Jeans Oversized Anos 90 (Edição Especial)",
+  "descricao": "Jaqueta jeans lavado claro original dos anos 90, botões metálicos de latão e bolsos frontais amplos.",
+  "tamanho": "G",
+  "categoria": "Casacos e Jaquetas",
+  "condicao": "Excelente (seminova)",
+  "preco": 159.90,
+  "ativa": true
+}
+
+### 13. Registrar compra de peça disponível (Cliente A compra peça #1) → 201 Created
+POST {{url}}/api/vendas
+Authorization: Bearer {{tokenClienteA}}
+Content-Type: application/json
+
+{
+  "pecaId": 1,
+  "dataVenda": "2026-10-30T14:30:00Z",
+  "formaPagamento": "PIX",
+  "observacoes": "Retirada presencial na loja sábado às 10h."
+}
+
+### 14. Regra de negócio → 409 Conflict (tentar comprar a mesma peça única #1 que já foi vendida)
+POST {{url}}/api/vendas
+Authorization: Bearer {{tokenClienteB}}
+Content-Type: application/json
+
+{
+  "pecaId": 1,
+  "dataVenda": "2026-10-30T15:00:00Z",
+  "formaPagamento": "Cartão de Crédito",
+  "observacoes": "Tentativa de compra de peça já vendida."
+}
+
+### 15. Teste de Autorização / IDOR → 403 Forbidden (Cliente B tentando cancelar/excluir a compra #1 do Cliente A)
+DELETE {{url}}/api/vendas/1
+Authorization: Bearer {{tokenClienteB}}
+
+### 16. Cancelar/excluir a própria compra (Cliente A ou Admin) → 204 No Content
+DELETE {{url}}/api/vendas/1
+Authorization: Bearer {{tokenClienteA}}
+
+### 17. Excluir peça sem vendas vinculadas (admin) → 204 No Content
+DELETE {{url}}/api/pecas/10
+Authorization: Bearer {{tokenAdmin}}
