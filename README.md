@@ -1,5 +1,5 @@
 # Garimpo Vintage — API de Brechó
-**Nicho:** Brechó ou loja de roupas · **Aluno:** Pedro (@pedro)
+**Nicho:** Brechó ou loja de roupas · **Aluno:** Pedro Falleiro Mendes (@pedrinfal)
 **API no ar:** https://brecho-api.onrender.com/swagger
 **Saúde e versão:** https://brecho-api.onrender.com/health · https://brecho-api.onrender.com/api/versao
 **Front-end:** https://brecho-front.onrender.com
