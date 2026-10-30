@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Brecho.Api/Brecho.Api.csproj" />
+  <Project Path="Brecho.Testes/Brecho.Testes.csproj" />
+</Solution>
