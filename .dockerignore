@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+.git/
+.github/
+Brecho.Testes/
+front/
+*.md
+*.http
